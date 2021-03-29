@@ -10,7 +10,7 @@ clean:
 	rm dfm_screen
 	rm add
 
-install:
+install: all
 	install dfm /usr/local/bin/
 	install dfm_screen /usr/local/bin/
 	install add /usr/local/bin/
