@@ -26,6 +26,7 @@ run_command() {
 
 setvariables() {
 	if [ "$(pwd)" = "/" ]; then
+		# Display something beautiful if your current path is '/'
 		parent=$(df -h | grep /$ | awk '{ print $1 ":\n  used:  " $5 " (" $3 ")\n  size:  " $2 }')
 	else
 		parent=$(ls -w 1 ..)
@@ -41,6 +42,7 @@ setvariables() {
 	if [ -d "$sel" ]; then
 		child=$(ls -w 1 "$sel")
 	else
+		# Configure your file preview here
 		case "$(file $sel)" in
 			(*"text"*) child=$(cat "$sel" | sed 's/%/%%/g' | head -n $(tput lines));;
 			(*) child=$(file "$sel");
@@ -54,16 +56,20 @@ setvariables
 
 while (true); do
 	output=$($screen "$(pwd)" "$parent" "$current" "$child")
+
+	# Here you can configure your shortcuts
+	# the variable $sel contains the selected item
+	# to use it in your shortcut
 	case $output in
 		q) break;;
 		j) [ $nsel -lt $(ls -w 1 | wc -l) ] && nsel=$($add $nsel 1);;
 		k) [ $nsel -gt 1 ] && nsel=$($add $nsel -1);;
-		h) cd ..; nsel=1;;
-		l) cd "$sel";nsel=1;;
+		h) nsel=1; cd ..;;
+		l) nsel=1; cd "$sel";;
 		o) xdg-open "$sel";tput civis;;
 		!) run_command;;
-		R) cd /;;
-		H) cd ~;;
+		R) nsel=1; cd /;;
+		H) nsel=1; cd ~;;
 		s) tput cnorm; stty "$old_stty"; clear; $SHELL; tput civis;;
 	esac
 
