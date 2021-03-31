@@ -1,10 +1,8 @@
 #!/bin/sh
 
-# Uncomment this if you don't have 'add' or 'dfm_screen' installed
+# Uncomment this if you don't have 'dfm_screen' installed
 # screen="$(pwd)/dfm_screen"
-# add="$(pwd)/add"
 screen="dfm_screen"
-add="add"
 
 old_stty=$(stty -g)
 
@@ -36,7 +34,7 @@ setvariables() {
 	sel=$(echo "$current" | sed "${nsel}q;d")
 
 	if [ $nsel -ge $(tput lines) ]; then
-		current=$(echo "$current" | sed "1,$($add ${nsel} -$(tput lines) 1)d")
+		current=$(echo "$current" | sed "1,$((${nsel} - $(tput lines) + 1))d")
 	fi
 
 	if [ -d "$sel" ]; then
@@ -45,7 +43,8 @@ setvariables() {
 		# Configure your file preview here
 		case "$(file $sel)" in
 			(*"text"*) child=$(cat "$sel" | head -n $(tput lines));;
-			(*) child=$(file "$sel");
+			(*"image"*) child="";;
+			(*) child=$(file "$sel");;
 		esac
 	fi
 	current=$(echo "$current" | sed "s/^$(echo $sel | sed 's/\[/\\[/g')$/[ & ]/g")
@@ -62,8 +61,8 @@ while (true); do
 	# to use it in your shortcut
 	case $output in
 		q) break;;
-		j) [ $nsel -lt $(ls -w 1 | wc -l) ] && nsel=$($add $nsel 1);;
-		k) [ $nsel -gt 1 ] && nsel=$($add $nsel -1);;
+		j) [ $nsel -lt $(ls -w 1 | wc -l) ] && nsel=$(($nsel + 1));;
+		k) [ $nsel -gt 1 ] && nsel=$(($nsel - 1));;
 		h) nsel=1; cd ..;;
 		l) nsel=1; cd "$sel";;
 		o) xdg-open "$sel";tput civis;;
