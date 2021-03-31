@@ -27,7 +27,7 @@ int main(int argc, char ** argv) {
 
 	for (int i = 0; i < 4; ++i) {
 		windows[i] = newwin(0, width, 1, i * width);
-		wprintw(windows[i], argv[i + 2]);
+		wprintw(windows[i], "%s", argv[i + 2]);
 		wrefresh(windows[i]);
 	}
 

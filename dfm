@@ -44,7 +44,7 @@ setvariables() {
 	else
 		# Configure your file preview here
 		case "$(file $sel)" in
-			(*"text"*) child=$(cat "$sel" | sed 's/%/%%/g' | head -n $(tput lines));;
+			(*"text"*) child=$(cat "$sel" | head -n $(tput lines));;
 			(*) child=$(file "$sel");
 		esac
 	fi
