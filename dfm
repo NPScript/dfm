@@ -43,11 +43,10 @@ setvariables() {
 		# Configure your file preview here
 		case "$(file $sel)" in
 			(*"text"*) child=$(cat "$sel" | head -n $(tput lines));;
-			(*"image"*) child="";;
 			(*) child=$(file "$sel");;
 		esac
 	fi
-	current=$(echo "$current" | sed "s/^$(echo $sel | sed 's/\[/\\[/g')$/[ & ]/g")
+	current=$(echo "$current" | sed "s/^$(echo $sel | sed 's/\[/\\[/g')$/● & $(printf '═%.0s' $(seq $(($(tput cols) / 3 - ${#sel} - 4))))/g")
 }
 
 nsel=1
