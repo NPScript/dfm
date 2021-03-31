@@ -11,11 +11,12 @@ WINDOW * windows[3];
 SCREEN * screen;
 
 int main(int argc, char ** argv) {
-	setlocale(LC_ALL, "");
 	if (argc != 5) {
 		fprintf(stderr, "%s [title] [col 1] [col 2] [col 3]\n", argv[0]);
+		return -1;
 	}
 
+	setlocale(LC_ALL, "");
 	screen = newterm(NULL, stderr, stdin);
 	refresh();
 	printw(argv[1]);
